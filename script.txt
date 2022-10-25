@@ -3,3 +3,17 @@ docker run ‑‑env LICENSE=accept ‑‑env MQ_QMGR_NAME=QM1
            ‑‑publish 9443:9443
            ‑‑detach
            ibmcom/mq
+
+
+ properties and set method
+
+ XMSC_USERID -> admin setStringProperty("XMSC_USERID", userID);
+
+ XMSC_WMQ_QUEUE_MANAGER -> QM1  setQueueManager
+
+ XMSC_PASSWORD -> passw0rd setStringProperty("XMSC_PASSWORD", password);
+
+ XMSC_WMQ_CHANNEL -> DEV.ADMIN.SVRCONN  setChannel
+
+
+ XMSC_WMQ_HOST_NAME sethost setport
