@@ -5,3 +5,4 @@
 #    connName: localhost(1414)
 #    user: admin
 #    password: passw0rd
+dest: DEV.QUEUE.1

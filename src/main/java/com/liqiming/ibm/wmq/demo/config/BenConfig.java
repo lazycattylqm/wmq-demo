@@ -9,9 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jms.JmsProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.config.SimpleJmsListenerEndpoint;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
+import javax.jms.JMSException;
 import java.util.List;
 
 @Configuration
@@ -45,6 +49,35 @@ public class BenConfig {
     public JmsTemplate jmsTemplate(CachingConnectionFactory cachingJmsConnectionFactory) {
         final JmsTemplate jmsTemplate = new JmsTemplate(cachingJmsConnectionFactory);
         return jmsTemplate;
+    }
+
+    @Bean
+    public SimpleJmsListenerEndpoint jmsListenerEndpoint(
+            CachingConnectionFactory cachingJmsConnectionFactory) {
+        final SimpleJmsListenerEndpoint simpleJmsListenerEndpoint = new SimpleJmsListenerEndpoint();
+        simpleJmsListenerEndpoint.setMessageListener(val -> {
+            final String body;
+            try {
+                body = val.getBody(String.class);
+            } catch (JMSException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println(body);
+        });
+        simpleJmsListenerEndpoint.setDestination("DEV.QUEUE.1");
+        return simpleJmsListenerEndpoint;
+
+    }
+
+    @Bean
+    public DefaultMessageListenerContainer defaultJmsListenerContainerFactory(
+            CachingConnectionFactory cachingJmsConnectionFactory, SimpleJmsListenerEndpoint jmsListenerEndpoint) {
+        final DefaultJmsListenerContainerFactory defaultJmsListenerContainerFactory =
+                new DefaultJmsListenerContainerFactory();
+        defaultJmsListenerContainerFactory.setConnectionFactory(cachingJmsConnectionFactory);
+        final DefaultMessageListenerContainer listenerContainer =
+                defaultJmsListenerContainerFactory.createListenerContainer(jmsListenerEndpoint);
+        return listenerContainer;
     }
 
 }

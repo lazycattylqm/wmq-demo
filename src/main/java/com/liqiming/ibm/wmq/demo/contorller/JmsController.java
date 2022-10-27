@@ -1,8 +1,8 @@
 package com.liqiming.ibm.wmq.demo.contorller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.JmsException;
-import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +16,9 @@ public class JmsController {
 
     private JmsTemplate jmsTemplate;
 
+    @Value("${dest}")
+    private String dest;
+
     public JmsController(@Autowired JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
@@ -23,7 +26,7 @@ public class JmsController {
     @GetMapping("/send")
     public String sendMessage(@RequestParam("message") String message) {
         try {
-            jmsTemplate.convertAndSend("DEV.QUEUE.1", message);
+            jmsTemplate.convertAndSend(dest, message);
             return "success";
         } catch (JmsException e) {
             e.printStackTrace();
@@ -43,7 +46,7 @@ public class JmsController {
     }
 
 
-    @JmsListener(destination = "DEV.QUEUE.1")
+    //    @JmsListener(destination = "${dest}")
     public void listener(Message<String> message) {
         System.out.println("listener");
         System.out.println(message.getPayload());
