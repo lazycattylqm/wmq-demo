@@ -1,9 +1,10 @@
 package com.liqiming.ibm.wmq.demo.config;
 
-import com.ibm.mq.jms.MQConnectionFactory;
+import com.ibm.mq.jms.MQQueueConnectionFactory;
 import com.ibm.mq.spring.boot.MQConfigurationProperties;
 import com.ibm.mq.spring.boot.MQConnectionFactoryCustomizer;
-import com.ibm.mq.spring.boot.MQConnectionFactoryFactory;
+import com.ibm.msg.client.wmq.WMQConstants;
+import com.ibm.msg.client.wmq.common.CommonConstants;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jms.JmsProperties;
@@ -34,11 +35,20 @@ public class BenConfig {
 
     @Bean
     public CachingConnectionFactory cachingJmsConnectionFactory(MQConfigurationProperties properties,
-            ObjectProvider<List<MQConnectionFactoryCustomizer>> factoryCustomizers, JmsProperties jmsProperties) {
-        MQConnectionFactory wrappedConnectionFactory = new MQConnectionFactoryFactory(properties,
-                factoryCustomizers.getIfAvailable()).createConnectionFactory(MQConnectionFactory.class);
-//        MQConnectionFactory wrappedConnectionFactory = MQConnectionFactoryConfiguration.createConnectionFactory(properties, factoryCustomizers);
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(wrappedConnectionFactory);
+            ObjectProvider<List<MQConnectionFactoryCustomizer>> factoryCustomizers, JmsProperties jmsProperties)
+            throws JMSException {
+
+        final MQQueueConnectionFactory mqQueueConnectionFactory = new MQQueueConnectionFactory();
+        mqQueueConnectionFactory.setChannel("DEV.ADMIN.SVRCONN");
+        mqQueueConnectionFactory.setQueueManager("QM1");
+        mqQueueConnectionFactory.setHostName("localhost");
+        mqQueueConnectionFactory.setPort(1414);
+        mqQueueConnectionFactory.setStringProperty(WMQConstants.PASSWORD, "passw0rd");
+        mqQueueConnectionFactory.setStringProperty(WMQConstants.USERID, "admin");
+        mqQueueConnectionFactory.setIntProperty(CommonConstants.WMQ_CONNECTION_MODE, CommonConstants.WMQ_CM_CLIENT);
+//        MQConnectionFactory wrappedConnectionFactory = new MQConnectionFactoryFactory(properties,
+//                factoryCustomizers.getIfAvailable()).createConnectionFactory(MQConnectionFactory.class);
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(mqQueueConnectionFactory);
         connectionFactory.setCacheConsumers(true);
         connectionFactory.setCacheProducers(true);
         connectionFactory.setSessionCacheSize(1);

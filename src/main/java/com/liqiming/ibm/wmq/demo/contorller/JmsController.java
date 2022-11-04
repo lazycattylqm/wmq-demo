@@ -3,6 +3,7 @@ package com.liqiming.ibm.wmq.demo.contorller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.JmsException;
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +47,7 @@ public class JmsController {
     }
 
 
-    //    @JmsListener(destination = "${dest}")
+    @JmsListener(destination = "${dest}")
     public void listener(Message<String> message) {
         System.out.println("listener");
         System.out.println(message.getPayload());
