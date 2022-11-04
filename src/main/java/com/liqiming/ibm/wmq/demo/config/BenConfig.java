@@ -46,6 +46,7 @@ public class BenConfig {
         mqQueueConnectionFactory.setStringProperty(WMQConstants.PASSWORD, "passw0rd");
         mqQueueConnectionFactory.setStringProperty(WMQConstants.USERID, "admin");
         mqQueueConnectionFactory.setIntProperty(CommonConstants.WMQ_CONNECTION_MODE, CommonConstants.WMQ_CM_CLIENT);
+        mqQueueConnectionFactory.setBooleanProperty(WMQConstants.USER_AUTHENTICATION_MQCSP, true);
 //        MQConnectionFactory wrappedConnectionFactory = new MQConnectionFactoryFactory(properties,
 //                factoryCustomizers.getIfAvailable()).createConnectionFactory(MQConnectionFactory.class);
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory(mqQueueConnectionFactory);
@@ -61,7 +62,7 @@ public class BenConfig {
         return jmsTemplate;
     }
 
-    @Bean
+    //    @Bean
     public SimpleJmsListenerEndpoint jmsListenerEndpoint(
             CachingConnectionFactory cachingJmsConnectionFactory) {
         final SimpleJmsListenerEndpoint simpleJmsListenerEndpoint = new SimpleJmsListenerEndpoint();
@@ -79,7 +80,7 @@ public class BenConfig {
 
     }
 
-    @Bean
+    //    @Bean
     public DefaultMessageListenerContainer defaultJmsListenerContainerFactory(
             CachingConnectionFactory cachingJmsConnectionFactory, SimpleJmsListenerEndpoint jmsListenerEndpoint) {
         final DefaultJmsListenerContainerFactory defaultJmsListenerContainerFactory =
