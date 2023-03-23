@@ -11,6 +11,8 @@ import org.springframework.jms.core.JmsTemplate;
 
 import javax.jms.ConnectionFactory;
 
+import static com.liqiming.ibm.wmq.demo.DemoApplicationTests.activeMqContainer;
+
 @Configuration
 @EnableJms
 @Profile({"test"})
@@ -24,8 +26,10 @@ public class TestMqConfig {
 
     @Bean
     public ConnectionFactory connectionFactory() {
-//        return new ActiveMQConnectionFactory("tcp://localhost:61616");
-        return new ActiveMQConnectionFactory("vm://embedded?broker.persistent=false,useShutdownHook=false");
+        String brokerUrlFormat = "tcp://%s:%d";
+        String brokerUrl = String.format(brokerUrlFormat, activeMqContainer.getHost(), activeMqContainer.getFirstMappedPort());
+        return new ActiveMQConnectionFactory(brokerUrl);
+//        return new ActiveMQConnectionFactory("vm://embedded?broker.persistent=false,useShutdownHook=false");
     }
 
     @Bean
