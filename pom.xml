@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.liqiming.ibm.wmq</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>wmq-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
@@ -47,6 +47,22 @@
 			<artifactId>mq-jms-spring-boot-starter</artifactId>
 			<version>2.7.4</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.activemq.tooling</groupId>
+			<artifactId>activemq-junit</artifactId>
+			<version>5.16.5</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-all -->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-all</artifactId>
+			<version>5.17.4</version>
+			<scope>test</scope>
+		</dependency>
+
 
 	</dependencies>
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jms.JmsProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.SimpleJmsListenerEndpoint;
 import org.springframework.jms.connection.CachingConnectionFactory;
@@ -20,6 +21,7 @@ import javax.jms.JMSException;
 import java.util.List;
 
 @Configuration
+@Profile({"!test"})
 public class BenConfig {
     private ObjectProvider<List<MQConnectionFactoryCustomizer>> factoryCustomizers;
 
