@@ -13,12 +13,12 @@ import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Testcontainers
+//@Testcontainers
 public class DemoApplicationTests {
 
-	@Container
-	public static GenericContainer<?> activeMqContainer =
-			new GenericContainer<>(DockerImageName.parse("rmohr/activemq:5.14.3")).withExposedPorts(61616);
+//	@Container
+//	public static GenericContainer<?> activeMqContainer =
+//			new GenericContainer<>(DockerImageName.parse("rmohr/activemq:5.14.3")).withExposedPorts(61616);
 
 /*	@BeforeClass
 	public static void beforeAll() {
